@@ -2,55 +2,63 @@ Return-Path: <isdn4linux-bounces@listserv.isdn4linux.de>
 X-Original-To: lists+isdn4linux@lfdr.de
 Delivered-To: lists+isdn4linux@lfdr.de
 Received: from listserv.isdn4linux.de (listserv.isdn4linux.de [IPv6:2001:8d8:912:a9e:ab05:ddc6:eb4a:1ffd])
-	by mail.lfdr.de (Postfix) with ESMTPS id E997F89552
-	for <lists+isdn4linux@lfdr.de>; Mon, 12 Aug 2019 04:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C8734D1A6E
+	for <lists+isdn4linux@lfdr.de>; Wed,  9 Oct 2019 23:02:31 +0200 (CEST)
 Received: from listserv.isdn4linux.de (localhost [IPv6:0:0:0:0:0:0:0:1])
-	by listserv.isdn4linux.de (8.15.2/8.15.2) with ESMTP id x7C224V0021794;
-	Mon, 12 Aug 2019 04:02:22 +0200
+	by listserv.isdn4linux.de (8.15.2/8.15.2) with ESMTP id x99KwfZI013256;
+	Wed, 9 Oct 2019 22:59:01 +0200
 X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.101.2 at listserv.isdn4linux.de
-Authentication-Results: listserv.isdn4linux.de;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ya.ru header.i=@ya.ru header.b="Ns57BAss"
-Received: from forward105p.mail.yandex.net (forward105p.mail.yandex.net
- [IPv6:2a02:6b8:0:1472:2741:0:8b7:108])
- by listserv.isdn4linux.de (8.15.2/8.15.2) with ESMTPS id x7C21v5n021762
+X-Virus-Scanned: clamav-milter 0.101.4 at listserv.isdn4linux.de
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+ by listserv.isdn4linux.de (8.15.2/8.15.2) with ESMTPS id x99Kwa1T013242
  (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO)
- for <isdn4linux@listserv.isdn4linux.de>; Mon, 12 Aug 2019 04:01:57 +0200
+ for <isdn4linux@listserv.isdn4linux.de>; Wed, 9 Oct 2019 22:58:37 +0200
 X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.101.2 at listserv.isdn4linux.de
-Received: from mxback19o.mail.yandex.net (mxback19o.mail.yandex.net
- [IPv6:2a02:6b8:0:1a2d::70])
- by forward105p.mail.yandex.net (Yandex) with ESMTP id E36954D404A4
- for <isdn4linux@listserv.isdn4linux.de>; Mon, 12 Aug 2019 05:01:56 +0300 (MSK)
-Received: from localhost (localhost [::1])
- by mxback19o.mail.yandex.net (nwsmtp/Yandex) with ESMTP id PSgtxUIhxq-1uq0Cxg3;
- Mon, 12 Aug 2019 05:01:56 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail;
- t=1565575316; bh=BQKr3OvDuguSXhzF8fqJ3EOtPQzAv2elJDb71ZgRiCY=;
- h=Message-Id:Date:Subject:To:From;
- b=Ns57BAsscw02nJbiFEs0iAdEQmmbQTfCBprN/gQaQZsXjpNB3nuiy4G3VL+YpPMqp
- kchlvhBHrSKVZEfout0GQYXCm3e3jnFpnyMDzre4zmFmE9CJ2Vt10OFnatoV2psWFE
- NhG9yqqrpjwYbNKtFHumURcSuRr+nIDYwTQiBhww=
-Authentication-Results: mxback19o.mail.yandex.net; dkim=pass header.i=@ya.ru
-Received: by myt3-daa25987f51b.qloud-c.yandex.net with HTTP;
- Mon, 12 Aug 2019 05:01:56 +0300
-From: "lts2000@ya.ru" <lts2000@ya.ru>
-Envelope-From: lts2000@yandex.ru
-To: isdn4linux@listserv.isdn4linux.de
-Subject: Errors when compilling LCR --with-sip --with-gsm-bs --with-gsm-ms
- --with-asterisk
+X-Virus-Scanned: clamav-milter 0.101.4 at listserv.isdn4linux.de
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1Mzyi6-1hupE6357e-00wzdx; Wed, 09 Oct 2019 21:11:12 +0200
+From: Arnd Bergmann <arnd@arndb.de>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH v6 16/43] compat_ioctl: move isdn/capi ioctl translation into
+ driver
+Date: Wed,  9 Oct 2019 21:10:16 +0200
+Message-Id: <20191009191044.308087-16-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20191009190853.245077-1-arnd@arndb.de>
+References: <20191009190853.245077-1-arnd@arndb.de>
 MIME-Version: 1.0
-X-Mailer: Yamail [ http://yandex.ru ] 5.0
-Date: Mon, 12 Aug 2019 05:01:56 +0300
-Message-Id: <2862091565575316@myt3-daa25987f51b.qloud-c.yandex.net>
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.6.2 (listserv.isdn4linux.de [IPv6:::1]); Mon, 12 Aug 2019 04:02:42 +0200 (CEST)
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.6.2
- (listserv.isdn4linux.de [IPv6:2001:8d8:912:a9e:ab05:ddc6:eb4a:1ffd]);
- Mon, 12 Aug 2019 04:01:58 +0200 (CEST)
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,RCVD_IN_DNSWL_LOW,
-	SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.2-i4l
+X-Provags-ID: V03:K1:3PgdTLn3Isb1E8QdaS6ssQ4smTcDkiVZALshacjmZB+AtPbu7Xq
+ +7o5fh40aOG53PwqC68L1xQv4R2rrEcItv3d09B+15mWfs5dq4Tnu4b8BuUmfRm6UOVmtZd
+ zpvGOs+siVVcUrX1Q5s/nr5A9T4WhMwaKm/3W3e/li5neiNanzGsyRWZwZ9MgEx1znyplrR
+ z2rwUeFAJ5Ft6735YtEjg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:T1iQpEMoNIE=:Ec5jZoe1h4ziRs9BQ6o0Un
+ seQpXmXz1mt/Rlq35SGaHQgz/EDvd9tzi7sbt/nhyz9l7tZsxEzsi8vSk2DFtGaRildOFEKLK
+ rcvsBFcZarZOdcRlxNLC6/G3mMqwwHoPnQ7HdvLdz31U4tkn5a9ppjCH0MyLZjxmc/gfyYEly
+ IC4Cw4pmbd4VemaCwkC/7ZNabd/DXg2pY5TECEWQQqsG/rHuC5XyZsM1DzYmMVj3n7azugSHg
+ gvIWAtZHlrOOinbG2B0unzNcF/ct7c3oIGXxnY8ajaGrhkDLVUwqSoUALIYBNdYK9zG3NtCyq
+ 5C4PWmheU6osboe/KInh/jnQ30EyFsmE4MX9QUyua8QcgBLcuFfmzDrPrs1A44wqsdlk+avxX
+ lSiis/B5r+rCeIhGiZ/XQQzWqxFaElWZ4uYCAefjWxuvbsq6mlH1Hq3wspwbQhXyTrSUY8gEv
+ fqn4ejoFpuVpEjIMyxJnBmqU0LgK2eV1q8v18MnYiykWOUpvEwGgx8c4g7ZtBZe7zz+KpNv4C
+ gxENi2qWen9t1LZTe8R49RoCnZSgiC2f+DE6AHChH6fFEsaKrrW5+MPc0CHWjqgwNx1wHEMSk
+ NTylWY3BxnuzDzfz29QCa5FgUNXAqWpdrVq1MCxboeVgIpGhSRO07opkmEFHJ3RsUan0/t9w9
+ SUGtufWU+cpRi8t45KfkbcC6pNYu5PuaC6wDSKaQHIehAfp25K2DNeNVCyQMnPGlQH5/2Y6kO
+ cF4tPIDZa65NXLOiZQKyQYjUL0Xo+ysrblOpj6EOryhxk+zB2R0pUSTqi3bAI/v9qlhOWwUUl
+ qrpypCtTAeqnWlLUSwOmiPzrbUgCUx9DwOIQvzYixUPvTjn2gYG5YrLQSvJtbNH5TtUkcHRWU
+ 7crfeP1UpQtjFbPC2DDA==
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.6.2 (listserv.isdn4linux.de [IPv6:::1]); Wed, 09 Oct 2019 22:59:15 +0200 (CEST)
+X-Greylist: inspected by milter-greylist-4.6.2 (listserv.isdn4linux.de
+ [82.165.11.104]);
+ Wed, 09 Oct 2019 22:58:37 +0200 (CEST) for IP:'212.227.126.135'
+ DOMAIN:'mout.kundenserver.de' HELO:'mout.kundenserver.de'
+ FROM:'arnd@arndb.de' RCPT:''
+X-Greylist: Delayed for 01:05:14 by milter-greylist-4.6.2
+ (listserv.isdn4linux.de [82.165.11.104]);
+ Wed, 09 Oct 2019 22:58:37 +0200 (CEST)
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	RAZOR2_CF_RANGE_51_100,RAZOR2_CHECK,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE
+	autolearn=no autolearn_force=no version=3.4.2-i4l
 X-Spam-Checker-Version: SpamAssassin 3.4.2-i4l (2018-09-13) on
 	listserv.isdn4linux.de
 X-BeenThere: isdn4linux@listserv.isdn4linux.de
@@ -64,35 +72,125 @@ List-Post: <mailto:isdn4linux@listserv.isdn4linux.de>
 List-Help: <mailto:isdn4linux-request@listserv.isdn4linux.de?subject=help>
 List-Subscribe: <https://www.isdn4linux.de/mailman/listinfo/isdn4linux>,
  <mailto:isdn4linux-request@listserv.isdn4linux.de?subject=subscribe>
+Cc: Karsten Keil <isdn@linux-pingi.de>, Arnd Bergmann <arnd@arndb.de>,
+        y2038@lists.linaro.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isdn4linux@listserv.isdn4linux.de,
+        linux-fsdevel@vger.kernel.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: isdn4linux-bounces@listserv.isdn4linux.de
 Sender: "isdn4linux" <isdn4linux-bounces@listserv.isdn4linux.de>
 
-Hello! 
+Neither the old isdn4linux interface nor the newer mISDN stack
+ever had working 32-bit compat mode as far as I can tell.
 
-I'm trying to compile openbsc, libosmocore, libosmo-abis, libosmo-netif and LCR following this howto:
+However, the CAPI stack has some ioctl commands that are
+correctly listed in fs/compat_ioctl.c.
 
-https://osmocom.org/projects/cellular-infrastructure/wiki/SDR_OsmoTRX_network_from_scratch
+We can trivially move all of those into the corresponding
+file that implement the native handlers by adding a compat_ioctl
+redirect to that.
 
-When i'm trying to ./config --with-asterisk option and then trying to 'make', make aborting with "recipe for target 'chan_lcr.po' failed" error.
-When i'm trying to ./config without "--with-asterisk" option and then trying to 'make', make aborting with another error:
+I did notice that treating CAPI_MANUFACTURER_CMD() as compatible
+is broken, so I'm also adding a handler for that, realizing that
+in all likelyhood, nobody is ever going to call it.
 
+Cc: Karsten Keil <isdn@linux-pingi.de>
+Cc: netdev@vger.kernel.org
+Cc: isdn4linux@listserv.isdn4linux.de
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/isdn/capi/capi.c | 31 +++++++++++++++++++++++++++++++
+ fs/compat_ioctl.c        | 17 -----------------
+ 2 files changed, 31 insertions(+), 17 deletions(-)
 
-depbase=`echo sip.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
-        g++ -DHAVE_CONFIG_H -I.    -DWITH_GSMFR  -DWITH_GSMAMR -DWITH_GSM_BS -DWITH_GSM_MS  -DWITH_SIP -I/usr/include/sofia-sip-1.12    -Wall -DCONFIG_DATA="\"/usr/local/etc/lcr\"" -DSHARE_DATA="\"/usr/local/share/lcr\"" -DLOG_DIR="\"/usr/local/var/log/lcr\"" -DEXTENSION_DATA="\"/usr/local/var/lib/lcr/extensions\""   -g -O2 -MT sip.o -MD -MP -MF $depbase.Tpo -c -o sip.o sip.cpp &&\
-sip.cpp:22:2: warning: #warning ******************************************************** [-Wcpp]
-sip.cpp:23:2: warning: #warning Please apply the sofia-sip-gcc-4.8.patch ! [-Wcpp]
-sip.cpp:24:2: warning: #warning If this issue is already fixed, just remove this check. [-Wcpp]
-sip.cpp:25:2: warning: #warning ******************************************************** [-Wcpp]
-sip.cpp:26:2: error: #error
-make[2]: *** [sip.o] Error 1
-make[1]: *** [all-recursive] Error 1
-make: *** [all] Error 2
+diff --git a/drivers/isdn/capi/capi.c b/drivers/isdn/capi/capi.c
+index c92b405b7646..efce7532513c 100644
+--- a/drivers/isdn/capi/capi.c
++++ b/drivers/isdn/capi/capi.c
+@@ -950,6 +950,34 @@ capi_unlocked_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_COMPAT
++static long
++capi_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
++{
++	int ret;
++
++	if (cmd == CAPI_MANUFACTURER_CMD) {
++		struct {
++			unsigned long cmd;
++			compat_uptr_t data;
++		} mcmd32;
++
++		if (!capable(CAP_SYS_ADMIN))
++			return -EPERM;
++		if (copy_from_user(&mcmd32, compat_ptr(arg), sizeof(mcmd32)))
++			return -EFAULT;
++
++		mutex_lock(&capi_mutex);
++		ret = capi20_manufacturer(mcmd32.cmd, compat_ptr(mcmd32.data));
++		mutex_unlock(&capi_mutex);
++
++		return ret;
++	}
++
++	return capi_unlocked_ioctl(file, cmd, (unsigned long)compat_ptr(arg));
++}
++#endif
++
+ static int capi_open(struct inode *inode, struct file *file)
+ {
+ 	struct capidev *cdev;
+@@ -996,6 +1024,9 @@ static const struct file_operations capi_fops =
+ 	.write		= capi_write,
+ 	.poll		= capi_poll,
+ 	.unlocked_ioctl	= capi_unlocked_ioctl,
++#ifdef CONFIG_COMPAT
++	.compat_ioctl	= capi_compat_ioctl,
++#endif
+ 	.open		= capi_open,
+ 	.release	= capi_release,
+ };
+diff --git a/fs/compat_ioctl.c b/fs/compat_ioctl.c
+index a4e8fb7da968..f3b4179d6dff 100644
+--- a/fs/compat_ioctl.c
++++ b/fs/compat_ioctl.c
+@@ -44,9 +44,6 @@
+ #include <net/bluetooth/hci_sock.h>
+ #include <net/bluetooth/rfcomm.h>
+ 
+-#include <linux/capi.h>
+-#include <linux/gigaset_dev.h>
+-
+ #ifdef CONFIG_BLOCK
+ #include <linux/cdrom.h>
+ #include <linux/fd.h>
+@@ -681,20 +678,6 @@ COMPATIBLE_IOCTL(RFCOMMRELEASEDEV)
+ COMPATIBLE_IOCTL(RFCOMMGETDEVLIST)
+ COMPATIBLE_IOCTL(RFCOMMGETDEVINFO)
+ COMPATIBLE_IOCTL(RFCOMMSTEALDLC)
+-/* CAPI */
+-COMPATIBLE_IOCTL(CAPI_REGISTER)
+-COMPATIBLE_IOCTL(CAPI_GET_MANUFACTURER)
+-COMPATIBLE_IOCTL(CAPI_GET_VERSION)
+-COMPATIBLE_IOCTL(CAPI_GET_SERIAL)
+-COMPATIBLE_IOCTL(CAPI_GET_PROFILE)
+-COMPATIBLE_IOCTL(CAPI_MANUFACTURER_CMD)
+-COMPATIBLE_IOCTL(CAPI_GET_ERRCODE)
+-COMPATIBLE_IOCTL(CAPI_INSTALLED)
+-COMPATIBLE_IOCTL(CAPI_GET_FLAGS)
+-COMPATIBLE_IOCTL(CAPI_SET_FLAGS)
+-COMPATIBLE_IOCTL(CAPI_CLR_FLAGS)
+-COMPATIBLE_IOCTL(CAPI_NCCI_OPENCOUNT)
+-COMPATIBLE_IOCTL(CAPI_NCCI_GETUNIT)
+ /* Misc. */
+ COMPATIBLE_IOCTL(PCIIOC_CONTROLLER)
+ COMPATIBLE_IOCTL(PCIIOC_MMAP_IS_IO)
+-- 
+2.20.0
 
-Tried to compile it on Ubuntu 12.04.5 LTS, Debian 8, Ubuntu 16, Ubuntu 18, all distros are x64, gcc 4.6 to gcc 4.9, asterisk 11 to 13.
-
-I've spent hours trying to make it work and now asking for some assistance. Thank you!
 _______________________________________________
 isdn4linux mailing list
 isdn4linux@listserv.isdn4linux.de
